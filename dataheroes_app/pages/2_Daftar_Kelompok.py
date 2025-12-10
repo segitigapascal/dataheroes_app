@@ -1,25 +1,33 @@
-# pages/2_Daftar_Kelompok.py
 import streamlit as st
+
+st.set_page_config(page_title="Daftar Kelompok", page_icon="👥")
 
 st.title("👥 Daftar Kelompok (Guru)")
 
-if "jumlah_kelompok" not in st.session_state:
-    st.session_state["jumlah_kelompok"] = 0
+jumlah = st.number_input("Masukkan jumlah kelompok:", min_value=1, step=1)
 
-col1, col2 = st.columns([3,1])
-with col1:
-    jumlah = st.number_input("Masukkan jumlah kelompok:", min_value=1, value=int(st.session_state.get("jumlah_kelompok",1)), step=1)
-with col2:
-    if st.button("Buat / Update"):
-        st.session_state["jumlah_kelompok"] = int(jumlah)
-        # inisialisasi storage per kelompok
-        for i in range(1, int(jumlah)+1):
-            key = f"kel_{i}"
-            if key not in st.session_state:
-                st.session_state[key] = {
-                    "meta": {"Kelompok": i, "Nama Kelompok": f"Kelompok {i}", "Kelas": "", "Anggota": ""},
-                    "lkm": {}
-                }
-        st.success(f"Jumlah kelompok diatur ke {jumlah}")
-st.markdown("#### Status penyimpanan sementara (session):")
-st.json({k: v for k, v in st.session_state.items() if k.startswith("kel_")})
+st.write("---")
+
+# Form input data kelompok
+for i in range(1, jumlah + 1):
+    st.subheader(f"Kelompok {i}")
+    st.text_input(f"Nama Kelompok {i}", key=f"nama_{i}")
+    st.text_input(f"Kelas Kelompok {i}", key=f"kelas_{i}")
+    st.text_area(f"Anggota Kelompok {i}", key=f"anggota_{i}")
+
+st.write("---")
+
+# Tombol simpan
+if st.button("💾 Simpan Semua Data"):
+    st.session_state["data_kelompok"] = []
+
+    for i in range(1, jumlah + 1):
+        st.session_state["data_kelompok"].append({
+            "Kelompok": i,
+            "Nama": st.session_state.get(f"nama_{i}", ""),
+            "Kelas": st.session_state.get(f"kelas_{i}", ""),
+            "Anggota": st.session_state.get(f"anggota_{i}", "")
+        })
+
+    st.success("Data kelompok berhasil disimpan!")
+    st.json(st.session_state["data_kelompok"])
