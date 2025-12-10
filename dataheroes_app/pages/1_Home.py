@@ -1,6 +1,11 @@
-# pages/1_Home.py
 import streamlit as st
 
+st.set_page_config(page_title="Beranda", page_icon="🏠")
+
 st.title("🏠 Beranda — Data Heroes")
-st.write("Selamat datang di platform LKM digital untuk pembelajaran statistik kelas 7.")
-st.write("Gunakan menu di samping untuk navigasi.")
+
+st.markdown("""
+Selamat datang di platform **LKM Statistik Digital**.
+
+Gunakan menu di samping untuk navigasi.
+""")
